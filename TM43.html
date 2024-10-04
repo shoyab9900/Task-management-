@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Management System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            border-radius: 8px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        input[type="text"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        ul li {
+            background-color: #eee;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        ul li .task-text {
+            flex-grow: 1;
+        }
+
+        ul li button {
+            background-color: #dc3545;
+            padding: 5px 10px;
+            font-size: 14px;
+        }
+
+        ul li button:hover {
+            background-color: #c82333;
+        }
+
+        .edit-btn {
+            background-color: #ffc107;
+            margin-right: 5px;
+        }
+
+        .edit-btn:hover {
+            background-color: #e0a800;
+        }
+
+        /* Dark mode styles */
+        body.dark {
+            background-color: #333;
+            color: white;
+        }
+
+        .dark .container {
+            background-color: #444;
+            color: white;
+        }
+
+        .dark input[type="text"] {
+            background-color: #555;
+            border-color: #666;
+            color: white;
+        }
+
+        .dark ul li {
+            background-color: #555;
+        }
+
+        .dark button {
+            background-color: #006400;
+        }
+
+        .dark .edit-btn {
+            background-color: #ffa500;
+        }
+
+        .dark ul li button {
+            background-color: #ff6347;
+        }
+    </style>
+</head>
+<body class="light">
+
+    <div class="container">
+        <h1>Task Manager</h1>
+        <button onclick="toggleTheme()">Toggle Dark Mode</button>
+        <input type="text" id="taskInput" placeholder="Add a new task...">
+        <button onclick="addTask()">Add Task</button>
+        <ul id="taskList"></ul>
+    </div>
+
+    <script>
+        // Check for saved theme preference on load
+        window.onload = function() {
+            const currentTheme = localStorage.getItem('theme') || 'light';
+            document.body.className = currentTheme;
+        };
+
+        // Function to toggle between light and dark themes
+        function toggleTheme() {
+            let theme = document.body.className;
+            if (theme === 'light') {
+                theme = 'dark';
+            } else {
+                theme = 'light';
+            }
+            document.body.className = theme;
+            localStorage.setItem('theme', theme); // Save the theme in localStorage
+        }
+
+        function addTask() {
+            let taskInput = document.getElementById('taskInput');
+            let taskText = taskInput.value.trim();
+
+            if (taskText !== "") {
+                let ul = document.getElementById('taskList');
+
+                let li = document.createElement('li');
+                li.innerHTML = `
+                    <span class="task-text">${taskText}</span>
+                    <button class="edit-btn" onclick="editTask(this)">Edit</button>
+                    <button onclick="deleteTask(this)">Delete</button>
+                `;
+
+                ul.appendChild(li);
+                taskInput.value = '';
+            }
+        }
+
+        function deleteTask(button) {
+            let li = button.parentElement;
+            li.remove();
+        }
+
+        function editTask(button) {
+            let li = button.parentElement;
+            let taskText = li.querySelector('.task-text').innerText;
+            let newTaskText = prompt("Edit Task", taskText);
+
+            if (newTaskText !== null && newTaskText.trim() !== "") {
+                li.querySelector('.task-text').innerText = newTaskText.trim();
+            }
+        }
+    </script>
+
+</body>
+</html>
